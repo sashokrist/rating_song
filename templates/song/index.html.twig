@@ -1,0 +1,113 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SongController!{% endblock %}
+
+{% block body %}
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 15px;
+        }
+
+        .example-wrapper {
+            margin: 1em auto;
+            max-width: 800px;
+            width: 95%;
+            font: 18px/1.5 sans-serif;
+        }
+
+        .example-wrapper code {
+            background: #F5F5F5;
+            padding: 2px 6px;
+        }
+    </style>
+    <div class="container">
+        {% for type, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ type }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+        <div class="row justify-content-center">
+            <div>
+                <h1 class="text-center">Songs</h1>
+                {% if app.user %}
+                    <h4 class="text-center"> Logged in as {{ app.user.email }}</h4>
+                {% endif %}
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        {% if app.user %}
+                            <a href="songs/create" class="btn btn-primary">Create Song</a>
+                        {% else %}
+                            <a href="/login" class="btn btn-primary">You must login to create new song</a>
+                        {% endif %}
+                        <table>
+                            <thead>
+                            <tr>
+                                <th scope="col">
+                                    Image
+                                </th>
+                                <th scope="col">
+                                    Band
+                                </th>
+                                <th scope="col">
+                                    Song
+                                </th>
+                                <th scope="col">
+                                    Total
+                                </th>
+                                <th scope="col">
+                                    Average
+                                </th>
+                                <th scope="col">
+                                    Rating
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for song in songs %}
+                                <tr>
+                                    <td>
+                                        <img src="{{ asset(song.image) }}" width="100px" height="100пь" alt="">
+                                    </td>
+                                    <td>
+                                        {{ song.band }}
+                                    </td>
+                                    <td>
+                                        {{ song.getSongName() }}
+                                    </td>
+                                    <td>
+                                        {{ song.sum }} points.
+                                    </td>
+                                    <td>
+                                        {{ song.avr }} points.
+                                    </td>
+                                    <td>
+                                        <form action="{{ path('app_song_vote', { id:song.id }) }}" method="POST">
+                                            <div>
+                                                {% if app.user %}
+                                                    <input type="number" name="vote" maxlength="10" min="1" max="10">
+                                                    <button class="btn btn-danger btn-sm">RATE</button>
+                                                {% else %}
+                                                    <a href="/login" class="btn btn-primary">You must login to vote</a>
+                                                {% endif %}
+                                            </div>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

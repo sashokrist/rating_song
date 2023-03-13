@@ -87,7 +87,7 @@
                                         {{ song.sum }} points.
                                     </td>
                                     <td>
-                                        {{ song.avr }} points.
+                                        {{ song.avr|number_format(2) }} points.
                                     </td>
                                     <td>
                                         <form action="{{ path('app_song_vote', { id:song.id }) }}" method="POST">
